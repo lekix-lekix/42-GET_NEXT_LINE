@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/11/28 16:52:58 by kipouliq         ###   ########.fr       */
+/*   Updated: 2023/11/29 19:04:48 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	if (!s1)
 		return (s2);
+	if (!s2)
+		return (s1);
 	s1_size = ft_strlen(s1);
 	s2_size = ft_strlen(s2);
 	final_str = malloc(sizeof(char) * (s1_size + s2_size) + 1);
@@ -128,6 +130,15 @@ char    *ft_strcpy_malloc(char *src, char *end_ptr)
 	return (final_str);
 }
 
+void    ft_bzero(void *s, size_t n)
+{
+	size_t  i;
+
+	i = -1;
+	while (++i < n)
+		*((char *)s + i) = '\0';
+}
+
 char    *ft_dup_malloc_free(char *str, char *to_free)
 {
 	char *final_str;
@@ -142,48 +153,100 @@ char    *ft_dup_malloc_free(char *str, char *to_free)
 	final_str[i] = '\0';
 	if (to_free)
 		free(to_free);
+	// printf("final str = %s\n", final_str);
 	return (final_str);   
+}
+
+// char	*get_next_line_old(int fd)
+// {
+// 	static char	*static_str;
+// 	char		*line;
+// 	char		*eol;
+// 	int			bytes_read;
+
+// 	bytes_read = 1;
+// 	while (bytes_read)
+// 	{
+// 		if (!static_str && !line)
+// 			break ;
+// 		if (ft_strchr(static_str, '\0') && !bytes_read)
+// 		{
+// 			free(line);
+// 			return (static_str);
+// 		}
+// 		eol = ft_strchr(static_str, '\n');
+// 		if (eol)
+// 		{
+// 			line = ft_strcpy_malloc(static_str, eol + 1);
+// 			static_str = ft_dup_malloc_free(eol + 1, static_str);
+// 			if (!static_str || !line)
+// 				return (NULL);
+// 			return (line);
+// 		}
+// 		line = get_nbytes(fd, &bytes_read);
+// 		if (!line)
+// 			return (NULL);
+// 		static_str = ft_strjoin(static_str, line);
+// 		if (!static_str)
+// 			return (NULL);
+// 		if (bytes_read != BUFFER_SIZE)
+// 		{
+// 			line = ft_dup_malloc_free(static_str, static_str);
+// 			if (!line)
+// 				return (NULL);
+// 			return (line);
+// 		}
+// 	}
+// 	if (ft_strchr(static_str, '\0') && !bytes_read)
+// 		return (static_str);
+// 	return (NULL);
+// }
+
+int		check_static_str(char *static_str, char **eol)
+{
+	*eol = ft_strchr(static_str, '\n');
+	if (*eol)
+		return (1);
+	else
+		return (0); 
+	
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*final_str;
+	static char	*static_str;
 	char		*line;
 	char		*eol;
 	int			bytes_read;
 
-	bytes_read = 1;
-	while (bytes_read)
+	eol = NULL;
+	line = get_nbytes(fd, &bytes_read);
+	if (!bytes_read)
+		return (NULL);
+	while (!check_static_str(static_str, &eol))
 	{
 		line = get_nbytes(fd, &bytes_read);
+		if (!line)
+			return (NULL);
 		if (!bytes_read)
-		{
-			free(line);
+			break ;
+		static_str = ft_strjoin(static_str, line);
+		if (!static_str)
 			return (NULL);
-		}
-		if (bytes_read)
-			final_str = ft_strjoin(final_str, line);
-		if (!final_str)
+	}
+	if (eol)
+	{
+		line = ft_strcpy_malloc(static_str, eol + 1);
+		static_str = ft_dup_malloc_free(eol + 1, static_str);
+		if (!static_str || !line)
 			return (NULL);
-		eol = ft_strchr(final_str, '\n');
-		if (eol)
-		{
-			line = ft_strcpy_malloc(final_str, eol + 1);
-			if (!line)
-				return (NULL);
-			final_str = ft_dup_malloc_free(eol + 1, final_str);
-			if (!line)
-				return (NULL);
-			return (line);
-		}
-		if (bytes_read != BUFFER_SIZE)
-		{
-			line = ft_dup_malloc_free(final_str, NULL);
-			if (!line)
-				return (NULL);
-			free(final_str);
-				return (line);
-		}
+		return (line);
+	}
+	if (!bytes_read)
+	{
+		line = ft_dup_malloc_free(static_str, static_str);
+		static_str = NULL;
+		return (line);
 	}
 	return (NULL);
 }
@@ -192,12 +255,13 @@ int	main(void)
 {
 	char *str;
 	int fd = open("./test.txt", O_RDONLY);
-	int i;
+	int i = 0;
 
-	i = 0;
-	while (i <= 5)
+	while (i < 5)
 	{
 		str = get_next_line(fd);
+		if (!str)
+			break ;
 		printf("str = %s\n", str);
 		free(str);
 		i++;
