@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:22:46 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/03 13:22:11 by lekix            ###   ########.fr       */
+/*   Updated: 2023/12/03 16:14:50 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 # ifndef BUFFER_SIZE 
 # define BUFFER_SIZE 50
 # endif
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 char	*get_next_line(int fd);
 char	*something_happened(char *s1, char *s2);

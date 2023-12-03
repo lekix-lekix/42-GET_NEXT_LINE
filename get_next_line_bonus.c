@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/03 19:16:30 by lekix            ###   ########.fr       */
+/*   Updated: 2023/12/03 19:12:17 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./get_next_line.h"
-#include <fcntl.h>
-#include <stdint.h>
-#include <stdio.h>
+#include "./get_next_line_bonus.h"
 
 char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 {
@@ -96,23 +93,23 @@ char	*ft_return_line(char **static_str, char *eol)
 
 char	*get_next_line(int fd)
 {
-	static char	*static_str;
+	static char	*static_str[1024];
 	char		*line;
 	char		*eol;
 	int			bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!check_static_str(static_str, &eol))
+	if (!check_static_str(static_str[fd], &eol))
 	{
-		line = ft_fill_static(&static_str, &eol, &bytes_read, fd);
+		line = ft_fill_static(&static_str[fd], &eol, &bytes_read, fd);
 		if (!line)
-			return (something_happened(static_str, NULL));
+			return (something_happened(static_str[fd], NULL));
 	}
 	if (eol)
-		return (ft_return_line(&static_str, eol));
-	if (!bytes_read && static_str)
-		return (ft_end_of_file(&line, &static_str));
+		return (ft_return_line(&static_str[fd], eol));
+	if (!bytes_read && static_str[fd])
+		return (ft_end_of_file(&line, &static_str[fd]));
 	if (line)
 		free(line);
 	return (NULL);
@@ -120,25 +117,26 @@ char	*get_next_line(int fd)
 
 // int	main(void)
 // {
-// 	char	*str;
+// 	char	*str1;
+//     char    *str2;
 	
-// 	int		fd;
-//     int     fd2;
-    
-// 	fd = open("./alternate_line_nl_with_nl", O_RDONLY);
+// 	int		fd1;
+// 	int     fd2;
+// 	fd1 = open("./alternate_line_nl_with_nl", O_RDONLY);
 // 	fd2 = open("./nl", O_RDONLY);
-    // int i = 0;
-	// while (i < 9)
-	// {
-	// 	str = get_next_line(0);
-	// 	if (!str)
-	// 	{
-	// 		free(str);
-	// 		break ;
-	// 	}
-	// 	printf("str = %s\n", str);
-	// 	free(str);
-	// 	i++;
-	// }
+
+// 	while (1)
+//     {
+//         str1 = get_next_line(fd1);
+//         str2 = get_next_line(fd2);
+//         printf("s1 = %s\n", str1);
+//         printf("s2 = %s\n", str2);
+//         if (!str1 && !str2)
+//             break;
+//         free(str1);
+//         free(str2);
+//     }
+//     free(str1);
+//     free(str2);
 
 // }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 12:42:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/03 12:31:48 by lekix            ###   ########.fr       */
+/*   Updated: 2023/12/03 16:14:13 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./get_next_line.h"
+#include "./get_next_line_bonus.h"
 
 char	*something_happened(char *s1, char *s2)
 {
