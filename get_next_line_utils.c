@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 12:42:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/03 12:31:48 by lekix            ###   ########.fr       */
+/*   Updated: 2023/12/04 14:17:27 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ char	*get_nbytes(int fd, int *bytes_read)
 
 	i = -1;
 	str = malloc(sizeof(char) * (BUFFER_SIZE + 1)); // ok
+    // str = NULL;
 	if (!str)
 		return (something_happened(str, NULL));
 	while (++i < BUFFER_SIZE + 1)

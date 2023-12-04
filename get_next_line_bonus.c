@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/03 19:12:17 by lekix            ###   ########.fr       */
+/*   Updated: 2023/12/04 14:17:14 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,18 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 	if (end_ptr)
 	{
 		final_str = malloc(sizeof(char) * (end_ptr - str + 1)); // ok
+        // final_str = NULL;
 		if (!final_str)
-			return (something_happened(str, NULL));
+			return (something_happened(str, to_free));
 		while (str + ++i != end_ptr)
 			final_str[i] = str[i];
 	}
 	else
 	{
 		final_str = malloc(sizeof(char) * ft_strlen(str) + 1); // ok
+        // final_str = NULL;
 		if (!final_str)
-			return (something_happened(final_str, to_free));
+			return (something_happened(to_free, NULL));
 		while (str[++i])
 			final_str[i] = str[i];
 	}
@@ -45,7 +47,7 @@ char	*ft_end_of_file(char **line, char **static_str)
 	free(*line);
 	*line = ft_dup_cpy_malloc_free(*static_str, NULL, *static_str);
 	if (!(*line))
-		return (NULL);
+		return (something_happened(*static_str, NULL));
 	*static_str = NULL;
 	if (!ft_strlen(*line))
 	{
@@ -79,11 +81,14 @@ char	*ft_return_line(char **static_str, char *eol)
 
 	new_line = ft_dup_cpy_malloc_free(*static_str, eol + 1, NULL);
 	if (!new_line)
+    {
+        *static_str = NULL;
 		return (NULL);
+    }
 	*static_str = ft_dup_cpy_malloc_free(eol + 1, NULL, *static_str);
-	if (!static_str)
+	if (!*static_str)
 		return (something_happened(new_line, NULL));
-	if (static_str && (*static_str[0] == '\0'))
+	if (static_str && *static_str[0] == '\0')
 	{
 		free(*static_str);
 		*static_str = NULL;
@@ -109,7 +114,11 @@ char	*get_next_line(int fd)
 	if (eol)
 		return (ft_return_line(&static_str[fd], eol));
 	if (!bytes_read && static_str[fd])
-		return (ft_end_of_file(&line, &static_str[fd]));
+    {
+        line = ft_end_of_file(&line, &static_str[fd]);
+        static_str[fd] = NULL;
+		return (line);
+    }
 	if (line)
 		free(line);
 	return (NULL);
@@ -139,4 +148,20 @@ char	*get_next_line(int fd)
 //     free(str1);
 //     free(str2);
 
+// }
+
+// int main ()
+// {
+//     char *str;
+
+//     int fd = open("./nl", O_RDONLY);
+//     while (1)
+//     {
+//         str = get_next_line(fd);
+//         printf("str = %s\n", str);
+//         if (!str)
+//             break;
+//         free(str);
+//     }
+//     free(str);
 // }
