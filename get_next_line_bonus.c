@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/04 14:17:14 by kipouliq         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:16:21 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 	i = -1;
 	if (end_ptr)
 	{
-		final_str = malloc(sizeof(char) * (end_ptr - str + 1)); // ok
-        // final_str = NULL;
+		final_str = malloc(sizeof(char) * (end_ptr - str + 1));
 		if (!final_str)
 			return (something_happened(str, to_free));
 		while (str + ++i != end_ptr)
@@ -29,8 +28,7 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 	}
 	else
 	{
-		final_str = malloc(sizeof(char) * ft_strlen(str) + 1); // ok
-        // final_str = NULL;
+		final_str = malloc(sizeof(char) * ft_strlen(str) + 1);
 		if (!final_str)
 			return (something_happened(to_free, NULL));
 		while (str[++i])
@@ -81,10 +79,10 @@ char	*ft_return_line(char **static_str, char *eol)
 
 	new_line = ft_dup_cpy_malloc_free(*static_str, eol + 1, NULL);
 	if (!new_line)
-    {
-        *static_str = NULL;
+	{
+		*static_str = NULL;
 		return (NULL);
-    }
+	}
 	*static_str = ft_dup_cpy_malloc_free(eol + 1, NULL, *static_str);
 	if (!*static_str)
 		return (something_happened(new_line, NULL));
@@ -114,54 +112,12 @@ char	*get_next_line(int fd)
 	if (eol)
 		return (ft_return_line(&static_str[fd], eol));
 	if (!bytes_read && static_str[fd])
-    {
-        line = ft_end_of_file(&line, &static_str[fd]);
-        static_str[fd] = NULL;
+	{
+		line = ft_end_of_file(&line, &static_str[fd]);
+		static_str[fd] = NULL;
 		return (line);
-    }
+	}
 	if (line)
 		free(line);
 	return (NULL);
 }
-
-// int	main(void)
-// {
-// 	char	*str1;
-//     char    *str2;
-	
-// 	int		fd1;
-// 	int     fd2;
-// 	fd1 = open("./alternate_line_nl_with_nl", O_RDONLY);
-// 	fd2 = open("./nl", O_RDONLY);
-
-// 	while (1)
-//     {
-//         str1 = get_next_line(fd1);
-//         str2 = get_next_line(fd2);
-//         printf("s1 = %s\n", str1);
-//         printf("s2 = %s\n", str2);
-//         if (!str1 && !str2)
-//             break;
-//         free(str1);
-//         free(str2);
-//     }
-//     free(str1);
-//     free(str2);
-
-// }
-
-// int main ()
-// {
-//     char *str;
-
-//     int fd = open("./nl", O_RDONLY);
-//     while (1)
-//     {
-//         str = get_next_line(fd);
-//         printf("str = %s\n", str);
-//         if (!str)
-//             break;
-//         free(str);
-//     }
-//     free(str);
-// }

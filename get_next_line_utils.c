@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 12:42:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/04 14:17:27 by kipouliq         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:02:27 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (s2);
 	s1_size = ft_strlen(s1);
 	s2_size = ft_strlen(s2);
-	final_str = malloc(sizeof(char) * (s1_size + s2_size + 1)); // ok
+	final_str = malloc(sizeof(char) * (s1_size + s2_size + 1));
 	if (!final_str)
 		return (something_happened(s1, s2));
 	while (s1[++i])
@@ -96,8 +96,7 @@ char	*get_nbytes(int fd, int *bytes_read)
 	int		i;
 
 	i = -1;
-	str = malloc(sizeof(char) * (BUFFER_SIZE + 1)); // ok
-    // str = NULL;
+	str = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!str)
 		return (something_happened(str, NULL));
 	while (++i < BUFFER_SIZE + 1)

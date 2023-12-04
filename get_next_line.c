@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2023/12/04 14:21:54 by kipouliq         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:15:28 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 	i = -1;
 	if (end_ptr)
 	{
-		final_str = malloc(sizeof(char) * (end_ptr - str + 1)); // ok
-        // final_str = NULL;
+		final_str = malloc(sizeof(char) * (end_ptr - str + 1));
 		if (!final_str)
 			return (something_happened(str, to_free));
 		while (str + ++i != end_ptr)
@@ -32,8 +31,7 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 	}
 	else
 	{
-		final_str = malloc(sizeof(char) * ft_strlen(str) + 1); // ok
-        // final_str = NULL;
+		final_str = malloc(sizeof(char) * ft_strlen(str) + 1);
 		if (!final_str)
 			return (something_happened(to_free, NULL));
 		while (str[++i])
@@ -48,8 +46,7 @@ char	*ft_dup_cpy_malloc_free(char *str, char *end_ptr, char *to_free)
 char	*ft_end_of_file(char **line, char **static_str)
 {
 	free(*line);
-	*line = ft_dup_cpy_malloc_free(*static_str, NULL, *static_str); // ok
-    // *line = NULL;
+	*line = ft_dup_cpy_malloc_free(*static_str, NULL, *static_str);
 	if (!(*line))
 		return (something_happened(*static_str, NULL));
 	*static_str = NULL;
@@ -85,10 +82,10 @@ char	*ft_return_line(char **static_str, char *eol)
 
 	new_line = ft_dup_cpy_malloc_free(*static_str, eol + 1, NULL);
 	if (!new_line)
-    {
-        *static_str = NULL;
+	{
+		*static_str = NULL;
 		return (NULL);
-    }
+	}
 	*static_str = ft_dup_cpy_malloc_free(eol + 1, NULL, *static_str);
 	if (!*static_str)
 		return (something_happened(new_line, NULL));
@@ -118,35 +115,12 @@ char	*get_next_line(int fd)
 	if (eol)
 		return (ft_return_line(&static_str, eol));
 	if (!bytes_read && static_str)
-    {
+	{
 		line = ft_end_of_file(&line, &static_str);
-        static_str = NULL;
-        return (line);        
-    }
+		static_str = NULL;
+		return (line);
+	}
 	if (line)
 		free(line);
 	return (NULL);
-}
-
-int	main(void)
-{
-	char	*str;
-	
-	// int		fd;
-    // int     fd2;
-    
-	// fd = open("./alternate_line_nl_with_nl", O_RDONLY);
-	// fd2 = open("./nl", O_RDONLY);
-	while (1)
-	{
-		str = get_next_line(0);
-		if (!str)
-		{
-			free(str);
-			break ;
-		}
-		printf("str = %s\n", str);
-		free(str);
-	}
-
 }
